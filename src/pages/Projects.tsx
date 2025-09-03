@@ -137,7 +137,7 @@ const PROJECTS: Record<string, ProjectEntry> = {
 export default function Projects() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const [search, setSearch] = useSearchParams();
+  const [search] = useSearchParams();
   const battleRef = useRef<BattleTransitionHandle>(null);
 
   // Navegación con transición (sin tocar App.tsx)

@@ -216,17 +216,17 @@ export const BattleTransition = React.forwardRef<BattleTransitionHandle, { modes
     const [active, setActive] = useState(false);
     const [phase, setPhase] = useState<"in" | "flash" | "out">("in");
     const [mode, setMode] = useState<BattleMode>("bars");
-    const doneCb = useRef<(() => void) | undefined>();
+    const doneCb = useRef<(() => void) | null>(null);
     const timeoutRef = useRef<number | null>(null);
 
-    const chooseMode = useCallback(() => {
-      const pool = (modes && modes.length ? modes : ["bars","iris","checker"]);
+    const chooseMode = useCallback((): BattleMode => {
+      const pool: BattleMode[] = (modes && modes.length ? modes : ["bars","iris","checker"]);
       return pool[(Math.random()*pool.length)|0];
     }, [modes]);
 
     React.useImperativeHandle(ref, () => ({
       play: (onComplete?: () => void) => {
-        doneCb.current = onComplete;
+        doneCb.current = onComplete ?? null;
         setMode(chooseMode());
         setPhase("in");
         setActive(true);
@@ -311,34 +311,7 @@ export const BattleTransition = React.forwardRef<BattleTransitionHandle, { modes
                 })}
               </div>
             )}
-
-            {/* SLASHES (diagonales visibles) */}
-            {mode === "slashes" && (
-              <div className="absolute inset-0 z-10 pointer-events-none">
-                {Array.from({ length: 7 }).map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute -left-1/4 top-0 w-[160%] h-16"
-                    style={{
-                      transformOrigin: "left center",
-                      // blanco con blend para que resalte sobre el overlay
-                      mixBlendMode: "screen",
-                      background:
-                        "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.9) 15%, rgba(255,255,255,0.9) 85%, rgba(255,255,255,0) 100%)",
-                      filter: "drop-shadow(0 0 10px rgba(255,255,255,0.35))",
-                    }}
-                    initial={{ rotate: -20, x: -900, opacity: 0 }}
-                    animate={{
-                      rotate: -20,
-                      x: phase === "in" ? 0 : phase === "out" ? 900 : 0,
-                      opacity: 1,
-                    }}
-                    transition={{ duration: 0.35, delay: i * 0.05 }}
-                  />
-                ))}
-              </div>
-            )}
-
+            
             {/* FLASH */}
             <AnimatePresence>
               {phase === "flash" && (
