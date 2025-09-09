@@ -179,6 +179,10 @@ const skills: Skill[] = [
       title: "Alemán A1 - Comenzando Desde Cero",
       url: "https://www.udemy.com/certificate/UC-40604a17-891b-4553-b83c-1c1a04cdeff5/"
     },
+    {
+      title: "Curso interno de Scrum",
+      url: "https://www.linkedin.com/in/ferma/details/certifications/"
+    },
   ];
 
 
